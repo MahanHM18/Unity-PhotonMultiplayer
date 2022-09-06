@@ -9,11 +9,24 @@ public class Health : MonoBehaviourPunCallbacks, IPunObservable
 {
     public float health = 100;
 
+    int team;
+
+    private void Start()
+    {
+
+        team = (int)PhotonNetwork.LocalPlayer.CustomProperties["Team"];
+
+    }
     private void Update()
     {
         if (health <= 0)
         {
-            StartCoroutine(Respawn());
+            if (photonView.IsMine)
+            {
+                StartCoroutine(Respawn());
+                photonView.RPC(nameof(RPC_AddScorce), RpcTarget.All,team);
+            }
+
         }
     }
 
@@ -21,7 +34,9 @@ public class Health : MonoBehaviourPunCallbacks, IPunObservable
     public void TakeDamage(float value)
     {
         health -= value;
-        UIManager.Instance.SetHealthBar(health);
+
+        if (photonView.IsMine)
+            UIManager.Instance.SetHealthBar(health);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -43,30 +58,28 @@ public class Health : MonoBehaviourPunCallbacks, IPunObservable
         transform.position = new Vector3(0, 10, 0);
         GetComponent<CharacterController>().enabled = false;
 
-        photonView.RPC(nameof(RPC_AddScorce), RpcTarget.All);
-
         yield return new WaitForSeconds(1);
-        
+
         GetComponent<CharacterController>().enabled = true;
 
-        
-        
+
+
     }
 
     [PunRPC]
-    private void RPC_AddScorce()
+    private void RPC_AddScorce(int t)
     {
-        int team = (int)PhotonNetwork.LocalPlayer.CustomProperties["Team"];
 
-        if (team == 1)
+        if (t == 0)
+        {
+            GameManager.RedTeamScore++;
+            UIManager.Instance.SetRedScoreText(GameManager.RedTeamScore);
+
+        }
+        else if (t == 1)
         {
             GameManager.BlueTeamScore++;
             UIManager.Instance.SetBlueScoreText(GameManager.BlueTeamScore);
-        }
-        else
-        {
-            GameManager.RedTeamScore++;
-            UIManager.Instance.SetBlueScoreText(GameManager.RedTeamScore);
         }
     }
 }

@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         int team = (int)PhotonNetwork.LocalPlayer.CustomProperties["Team"];
 
+
+
         if (team == 0)
         {
             PhotonNetwork.Instantiate(RedPlayerPrefab.name, new Vector3(0, 5, 0), Quaternion.identity);

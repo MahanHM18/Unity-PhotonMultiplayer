@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
 
     public void SetRedScoreText(int value)
     {
-        BlueScoreText.text = value.ToString();
+        RedScoreText.text = value.ToString();
     }
 
     public void SetHealthBar(float value)
