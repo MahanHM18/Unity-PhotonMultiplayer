@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
     public Text BlueScoreText;
     public Text RedScoreText;
 
+    public Slider HealthBar;
+
     private void Awake()
     {
         if (Instance == null)
@@ -22,5 +24,10 @@ public class UIManager : MonoBehaviour
     public void SetRedScoreText(int value)
     {
         BlueScoreText.text = value.ToString();
+    }
+
+    public void SetHealthBar(float value)
+    {
+        HealthBar.value = value / 100;
     }
 }

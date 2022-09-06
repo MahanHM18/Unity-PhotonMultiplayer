@@ -21,6 +21,7 @@ public class Health : MonoBehaviourPunCallbacks, IPunObservable
     public void TakeDamage(float value)
     {
         health -= value;
+        UIManager.Instance.SetHealthBar(health);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -38,6 +39,7 @@ public class Health : MonoBehaviourPunCallbacks, IPunObservable
     IEnumerator Respawn()
     {
         health = 100;
+        UIManager.Instance.SetHealthBar(health);
         transform.position = new Vector3(0, 10, 0);
         GetComponent<CharacterController>().enabled = false;
 
@@ -56,7 +58,7 @@ public class Health : MonoBehaviourPunCallbacks, IPunObservable
     {
         int team = (int)PhotonNetwork.LocalPlayer.CustomProperties["Team"];
 
-        if (team == 0)
+        if (team == 1)
         {
             GameManager.BlueTeamScore++;
             UIManager.Instance.SetBlueScoreText(GameManager.BlueTeamScore);

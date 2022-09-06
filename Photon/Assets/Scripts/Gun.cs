@@ -7,6 +7,8 @@ public class Gun : MonoBehaviourPunCallbacks
 {
     public Transform GunTrasform;
     public ParticleSystem ps;
+
+    public LayerMask EnemyLayer;
     void Start()
     {
         
@@ -31,7 +33,7 @@ public class Gun : MonoBehaviourPunCallbacks
 
         Ray gunRay = new Ray(GunTrasform.position, GunTrasform.forward);
 
-        if (Physics.Raycast(gunRay, out RaycastHit hit, 100))
+        if (Physics.Raycast(gunRay, out RaycastHit hit, 100, EnemyLayer))
         {
             var enemyHealth = hit.transform.gameObject.GetComponent<Health>();
             if (enemyHealth)
